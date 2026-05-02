@@ -5,14 +5,23 @@
 </head>
 <body>
 
-<h2>Find Cities in a Country</h2>
+<h2>Find Cities by Country Code</h2>
 
 <form method="POST">
-    <label>Country Name:</label>
-    <input type="text" name="country" placeholder="e.g. United States">
-    <button type="submit">Search</button>
+    <input type="text" name="country_code" placeholder="e.g. US, CA, GB">
+    <button type="submit">Find</button>
 </form>
 
+{% if results %}
+    <h3>Results:</h3>
+    <ul>
+        {% for r in results %}
+            <li>{{ r.city }} - {{ r.country }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<br>
 <a href="/">Back Home</a>
 
 </body>

@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Results</title>
+    <title>Countries</title>
 </head>
 <body>
 
-<h2>Results</h2>
+<h2>Countries</h2>
 
 <table border="1">
     <tr>
-        {% for key in countries[0].keys() %}
-            <th>{{ key }}</th>
-        {% endfor %}
+        <th>Name</th>
+        <th>ISO Code</th>
     </tr>
 
-    {% for row in countries %}
+    {% for c in countries %}
     <tr>
-        {% for value in row.values() %}
-            <td>{{ value }}</td>
-        {% endfor %}
+        <td>{{ c.name }}</td>
+        <td>{{ c.iso2 }}</td>
     </tr>
     {% endfor %}
 </table>
 
+<br>
 <a href="/">Back Home</a>
 
 </body>
