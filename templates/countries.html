@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+</head>
+<body>
+
+<h2>Results</h2>
+
+<table border="1">
+    <tr>
+        {% for key in countries[0].keys() %}
+            <th>{{ key }}</th>
+        {% endfor %}
+    </tr>
+
+    {% for row in countries %}
+    <tr>
+        {% for value in row.values() %}
+            <td>{{ value }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/">Back Home</a>
+
+</body>
+</html>
