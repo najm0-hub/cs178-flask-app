@@ -50,7 +50,7 @@ def search():
             WHERE Name LIKE %s
             LIMIT 50;
             """
-            data = get_tracks(query, (f"%{keyword}%",))
+            data = search_tracks((f"%{keyword}%",))
             return render_template('tracks.html', tracks=data)
 
         except Exception as e:
@@ -75,7 +75,7 @@ def find():
             JOIN Artist ON Album.ArtistId = Artist.ArtistId
             WHERE Artist.Name = %s;
             """
-            data = get_tracks(query, (artist,))
+            data = get_tracks_by_artist(artist)
             return render_template('find.html', results=data)
 
         except Exception as e:
