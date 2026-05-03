@@ -1,54 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Country Explorer</title>
+    <title>Music Explorer</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #1db954, #191414);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        .btn-custom {
+            background-color: #1db954;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #1ed760;
+            transform: scale(1.05);
+        }
+
+        .icon {
+            font-size: 40px;
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} text-center">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+<div class="container text-center">
 
-    <div class="container text-center">
+    <h1 class="mt-5">🎵 Music Explorer</h1>
 
-        <h1 class="mt-5">🌍 Country Explorer</h1>
+    <i class="fas fa-music icon"></i>
+    <i class="fas fa-headphones icon"></i>
+    <i class="fas fa-compact-disc icon"></i>
 
-        
-        
+    <p class="mt-3">Explore tracks, artists, and albums from your database.</p>
 
-        <p>Explore countries and cities using the world database.</p>
+    <div class="mt-4">
+        <a href="/tracks" class="btn btn-custom m-2">
+            <i class="fas fa-list"></i> View Tracks
+        </a>
 
-        <div class="mt-4">
+        <a href="/search" class="btn btn-custom m-2">
+            <i class="fas fa-search"></i> Search Tracks
+        </a>
 
-            <!-- View Countries -->
-            <a href="/countries" class="btn btn-primary m-2">
-                View Countries
-            </a>
-
-            <!-- Search Countries -->
-            <a href="/search" class="btn btn-success m-2">
-                Search Countries
-            </a>
-
-            <!-- Find Cities (FIXED ROUTE) -->
-            <a href="/find" class="btn btn-info m-2">
-                Find Cities by Country
-            </a>
-
-        </div>
-
+        <a href="/find" class="btn btn-custom m-2">
+            <i class="fas fa-user"></i> Find by Artist
+        </a>
     </div>
+
+</div>
 
 </body>
 </html>

@@ -1,7 +1,6 @@
 # author: Najmo
 # description: Flask example using redirect, url_for, and flash
 # credit: the template html files were constructed with the help of ChatGPT
-# description: Country Explorer Flask App using MySQL (world database)
 from flask import Flask, render_template, request, redirect, url_for, flash
 from dbCode import *
 
@@ -10,7 +9,7 @@ app.secret_key = "your_secret_key"
 
 
 # -------------------------
-# HOME PAGE
+# HOME
 # -------------------------
 @app.route('/')
 def home():
@@ -18,20 +17,26 @@ def home():
 
 
 # -------------------------
-# SHOW ALL COUNTRIES
+# VIEW TRACKS (JOIN!)
 # -------------------------
-@app.route('/countries')
-def countries():
+@app.route('/tracks')
+def tracks():
     try:
-        query = "SELECT name, iso2 FROM countries LIMIT 50;"
+        query = """
+        SELECT Track.Name AS Track, Artist.Name AS Artist, Album.Title AS Album
+        FROM Track
+        JOIN Album ON Track.AlbumId = Album.AlbumId
+        JOIN Artist ON Album.ArtistId = Artist.ArtistId
+        LIMIT 50;
+        """
         data = execute_query(query)
-        return render_template('countries.html', countries=data)
+        return render_template('tracks.html', tracks=data)
     except Exception as e:
         return str(e)
 
 
 # -------------------------
-# SEARCH COUNTRIES (BY CONTINENT OR NAME)
+# SEARCH TRACKS
 # -------------------------
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -40,13 +45,13 @@ def search():
 
         try:
             query = """
-            SELECT name, iso2
-            FROM countries
-            WHERE name LIKE %s
+            SELECT Name
+            FROM Track
+            WHERE Name LIKE %s
             LIMIT 50;
             """
             data = execute_query(query, (f"%{keyword}%",))
-            return render_template('countries.html', countries=data)
+            return render_template('tracks.html', tracks=data)
 
         except Exception as e:
             return str(e)
@@ -55,22 +60,22 @@ def search():
 
 
 # -------------------------
-# FIND CITIES BY COUNTRY CODE
+# FIND TRACKS BY ARTIST
 # -------------------------
 @app.route('/find', methods=['GET', 'POST'])
 def find():
     if request.method == 'POST':
-        country_code = request.form['country_code']
+        artist = request.form['artist']
 
         try:
             query = """
-            SELECT cities.name AS city, countries.name AS country
-            FROM cities
-            JOIN countries ON cities.country_id = countries.id
-            WHERE countries.iso2 = %s
-            LIMIT 100;
+            SELECT Track.Name AS Track, Artist.Name AS Artist
+            FROM Track
+            JOIN Album ON Track.AlbumId = Album.AlbumId
+            JOIN Artist ON Album.ArtistId = Artist.ArtistId
+            WHERE Artist.Name = %s;
             """
-            data = execute_query(query, (country_code,))
+            data = execute_query(query, (artist,))
             return render_template('find.html', results=data)
 
         except Exception as e:
@@ -80,7 +85,7 @@ def find():
 
 
 # -------------------------
-# RUN APP
+# RUN
 # -------------------------
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

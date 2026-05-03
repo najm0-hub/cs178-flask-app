@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tracks</title>
+
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+        }
+
+        table {
+            margin: auto;
+            margin-top: 30px;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th {
+            background-color: #1db954;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        tr:hover {
+            background-color: #1f1f1f;
+        }
+
+        a {
+            color: #1db954;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🎶 Track List</h2>
+
+{% if tracks %}
+<table>
+    <tr>
+        {% for key in tracks[0].keys() %}
+            <th>{{ key }}</th>
+        {% endfor %}
+    </tr>
+
+    {% for t in tracks %}
+    <tr>
+        {% for val in t.values() %}
+            <td>{{ val }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<br>
+<a href="/">⬅ Back Home</a>
+
+</body>
+</html>

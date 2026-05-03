@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Countries</title>
+    <title>Search</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            color: white;
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #1db954;
+            border: none;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #1ed760;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Search Countries</h2>
+<h2>🔍 Search Tracks</h2>
 
 <form method="POST">
-    <input type="text" name="keyword" placeholder="Enter country name">
+    <input type="text" name="keyword" placeholder="Enter song name">
+    <br><br>
     <button type="submit">Search</button>
 </form>
 
