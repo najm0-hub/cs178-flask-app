@@ -5,57 +5,84 @@
 import pymysql
 import creds
 
+
 def get_conn():
-    """Returns a connection to the MySQL RDS instance."""
-    conn = pymysql.connect(
+    """Create and return a connection to the MySQL RDS instance."""
+    return pymysql.connect(
         host=creds.host,
         user=creds.user,
         password=creds.password,
         db=creds.db,
+        cursorclass=pymysql.cursors.DictCursor
     )
-    return conn
+
 
 def execute_query(query, args=()):
-    """Executes a SELECT query and returns all rows as dictionaries."""
-    cur = get_conn().cursor(pymysql.cursors.DictCursor)
-    cur.execute(query, args)
-    rows = cur.fetchall()
-    cur.close()
+    """Execute a SELECT query and return results."""
+    conn = get_conn()
+    cur = conn.cursor()
+
+    try:
+        cur.execute(query, args)
+        rows = cur.fetchall()
+    finally:
+        cur.close()
+        conn.close()
+
     return rows
 
-def add_user_db(first_name, last_name, genre):
-    query = """
-    INSERT INTO Users (first_name, last_name, favorite_genre)
-    VALUES (%s, %s, %s)
+
+def execute_action(query, args=()):
+    """
+    Execute INSERT, UPDATE, DELETE queries.
+    Commits automatically.
     """
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute(query, (first_name, last_name, genre))
-    conn.commit()
-    cur.close()
-    conn.close()
+
+    try:
+        cur.execute(query, args)
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
 
 
-def get_users_db():
-    query = "SELECT * FROM Users"
-    return execute_query(query)
+# -------------------------
+# CHINOOK-SPECIFIC FUNCTIONS
+# -------------------------
 
-
-def delete_user_db(first_name):
-    query = "DELETE FROM Users WHERE first_name = %s"
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute(query, (first_name,))
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-
-def get_users_with_movies():
+def get_tracks():
+    """Get tracks with artist and album (JOIN)."""
     query = """
-    SELECT Users.first_name, Users.last_name, Movies.title
-    FROM Users
-    JOIN Movies ON Users.favorite_genre = Movies.genre
+    SELECT Track.Name AS Track, Artist.Name AS Artist, Album.Title AS Album
+    FROM Track
+    JOIN Album ON Track.AlbumId = Album.AlbumId
+    JOIN Artist ON Album.ArtistId = Artist.ArtistId
+    LIMIT 50;
     """
     return execute_query(query)
+
+
+def search_tracks(keyword):
+    """Search tracks by name."""
+    query = """
+    SELECT Name
+    FROM Track
+    WHERE Name LIKE %s
+    LIMIT 50;
+    """
+    return execute_query(query, (f"%{keyword}%",))
+
+
+def get_tracks_by_artist(artist_name):
+    """Find tracks by artist (JOIN)."""
+    query = """
+    SELECT Track.Name AS Track, Artist.Name AS Artist
+    FROM Track
+    JOIN Album ON Track.AlbumId = Album.AlbumId
+    JOIN Artist ON Album.ArtistId = Artist.ArtistId
+    WHERE Artist.Name = %s
+    LIMIT 50;
+    """
+    return execute_query(query, (artist_name,))
